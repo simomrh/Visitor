@@ -1,0 +1,193 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+.navbar{
+    width: 100%;
+    margin-bottom: 10px;
+
+}
+.navbar .navbar-logo{
+    color : #bb3e03;
+    font-size: 40px;
+    font-weight: bold;
+    font-family: 'Dancing Script', cursive;
+}
+.navbar-nav {
+    display: flex;
+    margin-left:50%;
+
+}
+.navbar-nav .nav-item {
+    padding-left: 30px;
+
+}
+.navbar-nav .nav-item a:hover{
+  text-decoration: white;
+  box-shadow: inset 100px 0 0 0 #bb3e03;
+}
+.collapse .btn{
+    margin-left: 30px;
+}
+.navbar p{
+    color:red;
+    font-size: 10px;
+}
+/*
+a{
+    text-decoration: none;
+}
+header{
+    display: flex;
+}
+.label{
+    margin: 20px 5% 0 5%;
+}
+.label a{
+    color : #bb3e03;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-family: 'Dancing Script', cursive;
+}
+
+.navbar{
+    margin-left: 35%;
+}
+
+.navbar ul{
+    list-style: none;
+    display:flex;
+}
+
+
+ .navbar ul li a{
+    color: #060644;
+    text-decoration: none;
+    font-size:20px;
+    font-weight: 600;
+ }
+.navbar ul li .btn{
+   width: 100px;
+   height: 40px;
+   background-color: #060644;
+   color: #fff;
+   border-radius:30px;
+   outline: none;
+   border: none;
+   cursor:pointer;
+   font-size:20px;
+    font-weight: 200;
+}*/
+body{
+    background-image: url("/img/background.jpg");
+}
+.body-content {
+    display:flex;
+
+}
+
+.body-content .b-title {
+margin-left: 10%;
+margin-top:5%;
+}
+.body-content .b-title h1{
+    font-size:30px;
+    margin-top:100px;
+}
+
+.body-content .b-title span{
+    color:#bb3e03;
+    font-family: 'Dancing Script', cursive;
+}
+
+
+.body-content .b-img{
+    margin:1%;
+}
+
+.body-content .b-img img{
+    width: 480px;
+    height: 480px;
+}
+body hr{
+    border:1px solid #bb3e03 ;
+    width: 80%;
+    margin:  auto;
+    margin-top: 2%;
+   margin-bottom: 5%;
+}
+#about .about-image .svg{
+    width: 500px;
+
+}
+#about .about-text{
+    margin: 1% 0 1% 20%;
+}
+#about .about-text span{
+    color:#bb3e03;
+    font-family: 'Dancing Script', cursive;
+}
+#about .about-hr{
+    border:1px solid #0ead69 ;
+    width: 16%;
+    margin:  auto;
+    margin-right:95% ;
+    margin-bottom: 2%;
+
+}
+
+#contact .contact-hr{
+    border:1px solid #0ead69 ;
+    width: 16%;
+    margin:  auto;
+    margin-right:95% ;
+    margin-bottom: 2%;
+
+}
+#contact .contact-image .svg{
+    margin-top:30%;
+    width: 500px;
+
+}
+#contact .contact-form{
+    width: 80%;
+    height: 50%;
+    margin:auto;
+    margin-left: 20%;
+}
+#contact .contact-form .input:hover{
+    border:1px solid #0ead69 ;
+}
+
+#footer #footer-logo{
+    margin-top:3%;
+    color : #bb3e03;
+    font-size: 30px;
+    font-weight: bold;
+    font-family: 'Dancing Script', cursive;
+}
+
+#footer #footer-title{
+    color : #bb3e03;
+    font-size: 30px;
+}
+#footer #footer-links{
+    margin-top:3%;
+    color:#0ead69;
+}
+#footer  #footer-contact{
+    margin-top:3%;
+}
+
+#footer  #footer-contact #footer-title{
+    color : #bb3e03;
+    font-size: 30px;
+}
+
+#footer #copyright{
+    margin-top:3%;
+    color : #bb3e03;
+    font-weight: bold;
+}
