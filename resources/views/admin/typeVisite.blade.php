@@ -5,21 +5,21 @@
 
 @section('content')
     <button class="btn btn-outline-success float-end addBtn" style="margin-top= 10%" data-toggle="modal"
-        data-target="#DepartementInfoModal">
-        <i class="fa-solid fa-plus"></i> Créer Département
+        data-target="#TypesInfoModal">
+        <i class="fa-solid fa-plus"></i> Créer Type Visite
     </button>
 <br> <br>
     <div class="card"  >
         <div class="card-header">
-            <i class="fa-solid fa-table-list"></i>   Département Liste
+            <i class="fa-solid fa-table-list"></i>   Types Visite Liste
         </div>
         <div class="card-body">
-    <table class="table table-hover" id="DepartementTable" style="width:100%">
+    <table class="table table-hover" id="TypeVisiteTable" style="width:100%">
         <thead class="bg-light">
             <tr>
                 <th scope="col"></th>
-                <th scope="col">ID Département</th>
-                <th scope="col">Nom Département</th>
+                <th scope="col">ID TP</th>
+                <th scope="col">Type Visite</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -31,22 +31,22 @@
     </table>
         </div>
     </div>
-    <div class="modal fade" id="DepartementInfoModal" tabindex="-1" role="dialog" style="width:100%;">
+    <div class="modal fade" id="TypesInfoModal" tabindex="-1" role="dialog" style="width:100%;">
         <div class="modal-dialog modal-lg" role="document" style="overflow:auto; max-height:90vh">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><span id="user_modal_title">nouvelle Département</span></h5>
+                    <h5 class="modal-title"><span id="user_modal_title">Nouveau Type</span></h5>
                     <button type="button" class="btn btn-outline-danger close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">✗</span>
                     </button>
                 </div>
                 <div class="modal-body">
 
-                    <form id="departementForm">
+                    <form id="typesForm">
                         <div class="form-group mb-2">
-                            <label for="NomDEP">NomDEP</label>
-                            <input type="text" class="form-control" id="NomDEP" name="NomDEP">
-                            <span class="text-danger" id="error_NomDEP"></span>
+                            <label for="NomTP">NomTP</label>
+                            <input type="text" class="form-control" id="NomTP" name="NomTP">
+                            <span class="text-danger" id="error_NomTP"></span>
                         </div>
 
                         <div class="form-group" id="message">
@@ -63,7 +63,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="DepartementEditModal" tabindex="-1" role="dialog" style="width:100%;">
+    <div class="modal fade" id="TypesEditModal" tabindex="-1" role="dialog" style="width:100%;">
         <div class="modal-dialog modal-lg" role="document" style="overflow:auto; max-height:90vh">
             <div class="modal-content">
                 <div class="modal-header">
@@ -78,15 +78,15 @@
                             {{ session()->get('message') }}
                         </div>
                     @endif
-                    <form id="DepartementFormEdit">
-                        <input type="hidden" class="form-control" id="IdDEP" name="IdDEP">
+                    <form id="TypeFormEdit">
+                        <input type="hidden" class="form-control" id="IdTP" name="IdTP">
                         <div class="form-group mb-2">
-                            <label for="NomDEP">NomDEP</label>
-                            <input type="text" class="form-control" id="NomDEP" name="NomDEP">
-                            <span class="text-danger" id="error_NomDEP"></span>
+                            <label for="NomTP">NomTP</label>
+                            <input type="text" class="form-control" id="NomTP" name="NomTP">
+                            <span class="text-danger" id="error_NomTP"></span>
                         </div>
 
-                        <div class="form-group" id="messageEditDep">
+                        <div class="form-group" id="messageEdit">
 
                         </div>
 
@@ -138,11 +138,11 @@
     }
 
     $(document).ready(function() {
-        var table = $('#DepartementTable').DataTable({
+        var table = $('#TypeVisiteTable').DataTable({
             language: {
         url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
     },
-            ajax: "{{ route('api.departements') }}",
+            ajax: "{{ route('api.types') }}",
             processing: true,
             columns: [{
                     className: 'dt-control',
@@ -150,17 +150,17 @@
                     data: null,
                     defaultContent: '',
                 },
-                {data: 'IdDEP'},
-                {data: 'NomDEP'},
+                {data: 'IdTP'},
+                {data: 'NomTP'},
                 {
-                 defaultContent: '<button class="btn btn-outline-primary edit" data-toggle="modal" data-target="#DepartementEditModal"><i class="fa-solid fa-pen icon"></i></button>',
+                 defaultContent: '<button class="btn btn-outline-primary edit" data-toggle="modal" data-target="#TypesEditModal"><i class="fa-solid fa-pen icon"></i></button>',
                 },
             ],
             order: [
                 [1, 'asc']
             ],
         });
-        $('#DepartementTable').on("click", ".edit", function(e) {
+        $('#TypeVisiteTable').on("click", ".edit", function(e) {
             e.preventDefault();
 
             $tr = $(this).closest('tr');
@@ -171,8 +171,8 @@
 
 
             console.log(data);
-            $('#IdDEP ').val(data[1]);
-            $('#NomDEP ').val(data[2]);
+            $('#IdTP ').val(data[1]);
+            $('#NomTP ').val(data[2]);
 
 
         });
@@ -183,31 +183,31 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            var IdDEP = $("input[id=IdDEP]").val();
+            var IdTP = $("input[id=IdTP]").val();
             $.ajax({
-                url: "{{ url('update_departement') }}" + '/' + IdDEP,
+                url: "{{ url('updateTypes') }}" + '/' + IdTP,
                 type: "PUT",
-                data: $("#DepartementFormEdit").serialize(),
+                data: $("#TypeFormEdit").serialize(),
                 success: function(data, textStatus, xhr) {
-                    $('#messageEditDep').html('');
+                    $('#messageEdit').html('');
                     if (xhr.status === 201) {
-                        $('#messageEditDep').html(
-                            '<div class="alert alert-success" id="messageEditDep" role="alert">' +
+                        $('#messageEdit').html(
+                            '<div class="alert alert-success" id="messageEdit" role="alert">' +
                             data
-                            .message + '</div>');
+                            .success + '</div>');
 
-                        $("#DepartementFormEdit")[0].reset();
+                        $("#TypeFormEdit")[0].reset();
                         table.ajax.reload();
                     } else {
-                        $('#messageEditDep').html(
-                            '<div class="alert alert-warning" id="messageEditDep" role="alert">' +
+                        $('#messageEdit').html(
+                            '<div class="alert alert-warning" id="messageEdit" role="alert">' +
                             data
                             .error + '</div>');
                     }
                 },
                 error: function(response) {
                     var errors = Object.keys(response.responseJSON.errors);
-                    $("#DepartementFormEdit input, #DepartementFormEdit select").each(function(index, item) {
+                    $("#TypeFormEdit input").each(function(index, item) {
                         var id = $(item).attr('id');
                         if (errors.includes(id)) {
                             $('#' + id).next("span").text("field is required or invalid.");
@@ -220,7 +220,7 @@
 
 
         // Add event listener for opening and closing details
-        $('#DepartementTable tbody').on('click', 'td.dt-control', function() {
+        $('#TypeVisiteTable tbody').on('click', 'td.dt-control', function() {
             var tr = $(this).closest('tr');
             var row = table.row(tr);
 
@@ -239,8 +239,8 @@
     <script type="text/javascript">
         $(document).on("click", ".btnEnreg", function(event) {
             event.preventDefault();
-            form_data = $("#departementForm").serialize()
-            $("#departementForm input").each(function(index, item) {
+            form_data = $("#typesForm").serialize()
+            $("#typesForm input").each(function(index, item) {
                 $(item).next("span").text('');
             });
 
@@ -250,7 +250,7 @@
                 }
             });
             $.ajax({
-                url: "/store_departement",
+                url: "/storeTypes",
                 type: "POST",
                 data: form_data,
                 success: function(data, textStatus, xhr) {
@@ -260,7 +260,7 @@
                             '<div class="alert alert-success" id="message" role="alert">' + data
                             .success + '</div>');
 
-                        $("#departementForm")[0].reset();
+                        $("#typesForm")[0].reset();
                         location.reload();
                     } else {
                         $('#message').html(

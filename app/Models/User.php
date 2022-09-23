@@ -46,6 +46,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'DateCr' => 'datetime:Y-m-d H:i:s',
+        'DateUp' => 'datetime:Y-m-d H:i:s'
     ];
 
 
@@ -61,7 +63,14 @@ class User extends Authenticatable
 
     public function department(){
 
-      return  $this->belongsTo(App\Models\Department::class , 'IdDEP');
+      return  $this->belongsTo(App\Models\Department::class );
 
     }
+
+    public function visite(){
+
+        return  $this->hasMany(App\Models\Visite::class, 'idUSR' );
+
+      }
+
 }

@@ -1,11 +1,6 @@
-
 @extends('layouts.app')
 
 
-
-<div >
-    <div >
-
-    </div>
-</div>
-
+@section('content')
+   
+@endsection

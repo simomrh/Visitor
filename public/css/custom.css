@@ -1,0 +1,154 @@
+:root {
+    --top_bar_back: white;
+    --top_bar_frontColor: lightgrey;
+    --side_menu_front_color: whitesmoke;
+    --side_menu_front_hover: white;
+    --side_menu_back: Indigo;
+}
+
+body {
+    position: relative;
+}
+
+.page_header {
+    position: fixed;
+    background-color: var(--top_bar_back);
+    height: 70px;
+    width: 100%;
+    box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.4);
+    z-index: 3;
+}
+
+.master_logo {
+    width: 250px;
+    height: 70px;
+    background-color: beige;
+    z-index: 3;
+}
+.master_username{
+  z-index: 5;
+  position: absolute;
+  width: 150px;
+  height: 70px;
+  top: 20px;
+  right: 0.5px;
+
+}
+.master_username h5{
+    background: linear-gradient(
+    to right,
+    #f5f5c1,
+    rgb(0, 0, 0)
+    );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+   font-family: Modak;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: -1px;
+    line-height: 1
+}
+
+.side_menu {
+    position: fixed;
+    width: 80px;
+    height: 100vh;
+    overflow: hidden;
+    top: 0;
+    padding: 90px 10px 10px 10px;
+    background-color: var(--side_menu_back);
+    border-right: 30px solid var(--side_menu_back);
+    font-size: larger;
+    transition: width .3s;
+    z-index: 2;
+}
+
+.side_menu:hover {
+    width: 250px;
+    overflow: auto;
+}
+
+.side_menu a {
+    text-decoration: none !important;
+}
+
+.side_menu .nav_logo {
+    display: block;
+    width: 100%;
+    height: 70px;
+    color: var(--side_menu_front_color);
+    font-weight: bold;
+}
+
+.side_menu .nav,
+.side_menu .nav div,
+.side_menu .nav_list {
+    width: 100%;
+}
+
+.side_menu .nav_list .nav_link {
+    color: var(--side_menu_front_color);
+    display: block;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 20px;
+    transition: background-color .3s, padding .3s;
+    overflow: hidden;
+}
+.side_menu .dropdown{
+    background-color: var(--side_menu_back);
+    display: block;
+    border: none;
+    outline: none;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 10px;
+    transition: background-color .3s, padding .3s;
+
+}
+.side_menu .dropdown .dropdown-menu{
+    background-color: var(--side_menu_back);
+    color: var(--side_menu_front_color) ;
+}
+.side_menu .nav_list  .nav_link:hover {
+    color: var(--side_menu_front_hover);
+    background-color: rgba(0, 0, 0, 0.2);
+    border-left: 3px solid rgba(0, 0, 0, 0.4);
+    padding: 0 5px 0 30px;
+}
+
+.side_menu .deconnectBtn {
+    position: absolute;
+    bottom: 10px;
+    overflow: hidden;
+}
+
+.main_content {
+    padding-top: 70px;
+    margin-left: 100px;
+}
+
+.main_container {
+    margin: 70px 50px 50px 50px;
+}
+
+.main_container .addBtn {
+    margin-bottom: 10px;
+
+}
+
+.form_col {
+    width: 45%;
+    margin: 10px;
+    display: inline-block;
+}
+
+#nomTd {
+    display: flex;
+    height: 50px;
+}
+
+.userTr .more-info {
+    cursor: pointer;
+}

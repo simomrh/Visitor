@@ -4,38 +4,56 @@
 
 
 @section('content')
-    <button class="btn btn-outline-success float-end addBtn" style="margin-top= 10%" data-toggle="modal"
-        data-target="#DepartementInfoModal">
-        <i class="fa-solid fa-plus"></i> Créer Département
-    </button>
-<br> <br>
-    <div class="card"  >
-        <div class="card-header">
-            <i class="fa-solid fa-table-list"></i>   Département Liste
-        </div>
-        <div class="card-body">
-    <table class="table table-hover" id="DepartementTable" style="width:100%">
+
+
+
+    <table class="table table-hover" id="DepartementTable" style="margin-top:10% ;">
         <thead class="bg-light">
             <tr>
-                <th scope="col"></th>
-                <th scope="col">ID Département</th>
-                <th scope="col">Nom Département</th>
+
+                <th scope="col">Id Rendez-vous</th>
+                <th scope="col">Id Visiteur</th>
+                <th scope="col">Contenu Email</th>
+                <th scope="col">Date Email</th>
+                <th scope="col">Errors Email</th>
+                <th scope="col">Confirmer</th>
+                <th scope="col">Annuler</th>
+                <th scope="col">Rate</th>
+                <th scope="col">Créer par</th>
+                <th scope="col">Créer en</th>
+                <th scope="col">mettre à jour par</th>
+                <th scope="col">mettre à jour en</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
 
+                <tr>
+                    <td id="IdRD"></td>
+                    <td id="IdVS"></td>
+                    <td id="ContenuEM"></td>
+                    <td id="DateEM"></td>
+                    <td id="ErrorsEM"></td>
+                    <td id="Confirmer"></td>
+                    <td id="Annuler"></td>
+                    <td id="Rate"></td>
+                    <td id="UserCr"></td>
+                    <td id="DateCr"></td>
+                    <td id="UserUp"></td>
+                    <td id="DateUp"></td>
+                    
+                </tr>
+
 
 
         </tbody>
     </table>
-        </div>
-    </div>
+
     <div class="modal fade" id="DepartementInfoModal" tabindex="-1" role="dialog" style="width:100%;">
         <div class="modal-dialog modal-lg" role="document" style="overflow:auto; max-height:90vh">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><span id="user_modal_title">nouvelle Département</span></h5>
+                    <h5 class="modal-title"><span id="user_modal_title"></span></h5>
                     <button type="button" class="btn btn-outline-danger close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">✗</span>
                     </button>
@@ -44,7 +62,7 @@
 
                     <form id="departementForm">
                         <div class="form-group mb-2">
-                            <label for="NomDEP">NomDEP</label>
+                            <label for="exampleFormControlInput1">NomDEP</label>
                             <input type="text" class="form-control" id="NomDEP" name="NomDEP">
                             <span class="text-danger" id="error_NomDEP"></span>
                         </div>
@@ -81,7 +99,7 @@
                     <form id="DepartementFormEdit">
                         <input type="hidden" class="form-control" id="IdDEP" name="IdDEP">
                         <div class="form-group mb-2">
-                            <label for="NomDEP">NomDEP</label>
+                            <label for="exampleFormControlInput1">NomDEP</label>
                             <input type="text" class="form-control" id="NomDEP" name="NomDEP">
                             <span class="text-danger" id="error_NomDEP"></span>
                         </div>
@@ -108,134 +126,11 @@
 
 
 @push('scripts')
-<script type="text/javascript">
-    function format(d) {
-        // `d` is the original data object for the row
-        return (
-            '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-            '<tr>' +
-            '<td>Crée par:</td>' +
-            '<td>' +
-            d.UserCr +
-            '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Crée le</td>' +
-            '<td>' +
-            d.DateCr +
-            '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Modifié par:</td>' +
-            '<td>'+ d.UserUp +'</td>' +
-            '</tr>' +
-            '<tr>'+
-            '<td>Modifié le:</td>' +
-            '<td>'+ d.DateUp +'</td>' +
-            '</tr>' +
-            '</table>'
-        );
-    }
-
-    $(document).ready(function() {
-        var table = $('#DepartementTable').DataTable({
-            language: {
-        url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
-    },
-            ajax: "{{ route('api.departements') }}",
-            processing: true,
-            columns: [{
-                    className: 'dt-control',
-                    orderable: false,
-                    data: null,
-                    defaultContent: '',
-                },
-                {data: 'IdDEP'},
-                {data: 'NomDEP'},
-                {
-                 defaultContent: '<button class="btn btn-outline-primary edit" data-toggle="modal" data-target="#DepartementEditModal"><i class="fa-solid fa-pen icon"></i></button>',
-                },
-            ],
-            order: [
-                [1, 'asc']
-            ],
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#DepartementTable').DataTable();
         });
-        $('#DepartementTable').on("click", ".edit", function(e) {
-            e.preventDefault();
-
-            $tr = $(this).closest('tr');
-
-            var data = $tr.children("td").map(function() {
-                return $(this).text();
-            }).get();
-
-
-            console.log(data);
-            $('#IdDEP ').val(data[1]);
-            $('#NomDEP ').val(data[2]);
-
-
-        });
-        $(document).on("click", ".btnUpdate", function(event) {
-            event.preventDefault();
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            var IdDEP = $("input[id=IdDEP]").val();
-            $.ajax({
-                url: "{{ url('update_departement') }}" + '/' + IdDEP,
-                type: "PUT",
-                data: $("#DepartementFormEdit").serialize(),
-                success: function(data, textStatus, xhr) {
-                    $('#messageEditDep').html('');
-                    if (xhr.status === 201) {
-                        $('#messageEditDep').html(
-                            '<div class="alert alert-success" id="messageEditDep" role="alert">' +
-                            data
-                            .message + '</div>');
-
-                        $("#DepartementFormEdit")[0].reset();
-                        table.ajax.reload();
-                    } else {
-                        $('#messageEditDep').html(
-                            '<div class="alert alert-warning" id="messageEditDep" role="alert">' +
-                            data
-                            .error + '</div>');
-                    }
-                },
-                error: function(response) {
-                    var errors = Object.keys(response.responseJSON.errors);
-                    $("#DepartementFormEdit input, #DepartementFormEdit select").each(function(index, item) {
-                        var id = $(item).attr('id');
-                        if (errors.includes(id)) {
-                            $('#' + id).next("span").text("field is required or invalid.");
-                        }
-                    });
-
-                },
-            });
-        });
-
-
-        // Add event listener for opening and closing details
-        $('#DepartementTable tbody').on('click', 'td.dt-control', function() {
-            var tr = $(this).closest('tr');
-            var row = table.row(tr);
-
-            if (row.child.isShown()) {
-                // This row is already open - close it
-                row.child.hide();
-                tr.removeClass('shown');
-            } else {
-                // Open this row
-                row.child(format(row.data())).show();
-                tr.addClass('shown');
-            }
-        });
-    });
-</script>
+    </script>
     <script type="text/javascript">
         $(document).on("click", ".btnEnreg", function(event) {
             event.preventDefault();
@@ -260,8 +155,7 @@
                             '<div class="alert alert-success" id="message" role="alert">' + data
                             .success + '</div>');
 
-                        $("#departementForm")[0].reset();
-                        location.reload();
+                        $("#userForm")[0].reset();
                     } else {
                         $('#message').html(
                             '<div class="alert alert-warning" id="message" role="alert">' + data
@@ -275,6 +169,88 @@
             });
         });
     </script>
+    <script type="text/javascript">
+        $(document).on("click", ".editBtn", function(e) {
+            e.preventDefault();
+
+            $tr = $(this).closest('tr');
+
+            var data = $tr.children("td").map(function() {
+                return $(this).text();
+            }).get();
 
 
+            console.log(data);
+            $('#IdDEP').val(data[0]);
+            $('#NomDEP').val(data[1]);
+
+
+        });
+        $(document).on("click", ".btnUpdate", function(event) {
+            event.preventDefault();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var IdDEP = $("input[id=IdDEP]").val();
+            $.ajax({
+                url: "{{ url('update_departement') }}" + '/' + IdDEP,
+                type: "PUT",
+                data: $("#DepartementFormEdit").serialize(),
+                success: function(data, textStatus, xhr) {
+                    $('#messageEditDep').html('');
+                    if (xhr.status === 201) {
+                        $('#messageEditDep').html(
+                            '<div class="alert alert-success" id="messageEditDep" role="alert">' +
+                            data
+                            .message + '</div>');
+
+                        $("#DepartementFormEdit")[0].reset();
+                    } else {
+                        $('#messageEditDep').html(
+                            '<div class="alert alert-warning" id="messageEditDep" role="alert">' +
+                            data
+                            .error + '</div>');
+                    }
+                },
+                error: function(response) {
+                    var errors = Object.keys(response.responseJSON.errors);
+                    $("#userFormEdit input, #userFormEdit select").each(function(index, item) {
+                        var id = $(item).attr('id');
+                        if (errors.includes(id)) {
+                            $('#' + id).next("span").text("field is required or invalid.");
+                        }
+                    });
+
+                },
+            });
+        });
+    </script>
+    <script>
+        $(document).on("click", ".addBtn, .editBtn", function() {
+
+            if ($(this).hasClass("addBtn")) {
+                $("#userForm input, #userForm select").each(function() {
+                    $(this).val();
+                });
+            } else {
+                $(this).parent().parent().find("td").each(function() {
+                    $("*[name='" + $(this).attr("id") + "']").val($(this).text());
+                });
+            }
+
+            $("#userInfoModal #user_modal_title").text(
+                ($(this).hasClass("addBtn")) ? "Nouvel Departement" : "Modification Departement"
+            );
+        });
+        $('td').hover(function() {
+            $(this).parent().children().css("background-color", "#e5e5e5");
+            $(this).css("background-color", "#fcf6bd")
+        });
+
+        $('tr').mouseleave(function() {
+            $(this).children('td').css("background-color", "#ffffff"); // or whatever
+        });
+    </script>
 @endpush

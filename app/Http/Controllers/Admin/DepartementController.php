@@ -17,33 +17,47 @@ class DepartementController extends Controller
         return view('admin.departement', compact('departements'));
     }
 
-
-
+    public function allDepartement(Request $request){
+        if($request->ajax()) {
+            $departement = Departement::all();
+            return response()->json(["data" => $departement]);
+        } else {
+            abort(404);
+        }
+    }
     public function storeDep(Request $req)
     {
-        try{
-        $req->validate([
-            'NomDEP' => "required",
+        try {
+            $req->validate([
+                'NomDEP' => "required",
 
-        ]);
+            ]);
 
-        $exist = Departement::where(['NomDEP' => $req->input("NomDEP")])->first();
+            $exist = Departement::where(['NomDEP' => $req->input("NomDEP")])->first();
 
 
-        if (!empty($exist)) {
-            return response()->json(["error" => "the Departement already exist"], 208);
+            if (!empty($exist)) {
+                return response()->json(["error" => "Departement est déja exister"], 208);
+            }
+
+            $departement = new Departement();
+            $departement->NomDEP = $req->input('NomDEP');
+            $departement->UserCr = Auth::user()->LoginUSR;
+            $departement->DateCr  =  date("Y-m-d H:i:s");
+            $departement->save();
+            return response()->json(['success' => 'Departement est Créé avec succès !'], 201);
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
+    }
+    public function UpdateDepartement(Request $request, $IdDEP)
+    {
+        $departement = Departement::find($IdDEP);
 
-        $departement = new Departement();
-        $departement->NomDEP = $req->input('NomDEP');
-        $departement->UserCr = Auth::user()->LoginUSR;
-        $departement->DateCr  =  date("Y-m-d H:i:s");
+        $departement->NomDEP = $request->input('NomDEP');
+        $departement->UserUp = Auth::user()->LoginUSR;
+        $departement->DateUp  =  date("Y-m-d H:i:s");
         $departement->save();
-        return response()->json(['success' => 'Departement is successfully cretaed !'], 201);
-    } catch(\Exception $e){
-        return $e->getMessage();
+        return response()->json(['message' => 'Departement est Modifié avec succès   !'], 201);
     }
-    }
-
-
 }
