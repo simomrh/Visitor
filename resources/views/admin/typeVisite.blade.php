@@ -1,19 +1,20 @@
 @extends('layouts.app')
 
-
-
-
 @section('content')
-    <button class="btn btn-outline-success float-end addBtn" style="margin-top= 10%" data-toggle="modal"
+
+<br> <br>
+    <div class="card list"  >
+        <div class="card-header list_title">
+            <i class="fa-solid fa-table-list"></i>   Types Visite Liste
+        </div>
+        <div class="card-body list_body">
+            <a class="btn btn-outline-success float-start addBtn" href="{{url('/exportTP')}}">
+                <i class="fa-solid fa-file-export"></i> Export CSV
+            </a>
+            <button class="btn btn-outline-success float-end addBtn" style="margin-top= 10%" data-toggle="modal"
         data-target="#TypesInfoModal">
         <i class="fa-solid fa-plus"></i> Créer Type Visite
     </button>
-<br> <br>
-    <div class="card"  >
-        <div class="card-header">
-            <i class="fa-solid fa-table-list"></i>   Types Visite Liste
-        </div>
-        <div class="card-body">
     <table class="table table-hover" id="TypeVisiteTable" style="width:100%">
         <thead class="bg-light">
             <tr>
@@ -35,21 +36,21 @@
         <div class="modal-dialog modal-lg" role="document" style="overflow:auto; max-height:90vh">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><span id="user_modal_title">Nouveau Type</span></h5>
+                    <h5 class="modal-title"><span id="titleTP">Ajouter Type Visite</span></h5>
                     <button type="button" class="btn btn-outline-danger close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">✗</span>
+                        <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
                     </button>
                 </div>
                 <div class="modal-body">
 
                     <form id="typesForm">
                         <div class="form-group mb-2">
-                            <label for="NomTP">NomTP</label>
+                            <label for="NomTP">Nom Type Visite</label>
                             <input type="text" class="form-control" id="NomTP" name="NomTP">
                             <span class="text-danger" id="error_NomTP"></span>
                         </div>
 
-                        <div class="form-group" id="message">
+                        <div class="form-group" id="messageTP">
 
                         </div>
 
@@ -67,9 +68,9 @@
         <div class="modal-dialog modal-lg" role="document" style="overflow:auto; max-height:90vh">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><span id="user_modal_title"></span>Modification Deparetement</h5>
+                    <h5 class="modal-title"><span id="titleTP"></span>Modification Type Visite</h5>
                     <button type="button" class="btn btn-outline-danger close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">✗</span>
+                        <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -86,7 +87,7 @@
                             <span class="text-danger" id="error_NomTP"></span>
                         </div>
 
-                        <div class="form-group" id="messageEdit">
+                        <div class="form-group" id="messageEditTP">
 
                         </div>
 
@@ -189,18 +190,18 @@
                 type: "PUT",
                 data: $("#TypeFormEdit").serialize(),
                 success: function(data, textStatus, xhr) {
-                    $('#messageEdit').html('');
+                    $('#messageEditTP').html('');
                     if (xhr.status === 201) {
-                        $('#messageEdit').html(
-                            '<div class="alert alert-success" id="messageEdit" role="alert">' +
+                        $('#messageEditTP').html(
+                            '<div class="alert alert-success" id="messageEditTP" role="alert">' +
                             data
-                            .success + '</div>');
+                            .message + '</div>');
 
                         $("#TypeFormEdit")[0].reset();
                         table.ajax.reload();
                     } else {
-                        $('#messageEdit').html(
-                            '<div class="alert alert-warning" id="messageEdit" role="alert">' +
+                        $('#messageEditTP').html(
+                            '<div class="alert alert-warning" id="messageEditTP" role="alert">' +
                             data
                             .error + '</div>');
                     }
@@ -254,23 +255,28 @@
                 type: "POST",
                 data: form_data,
                 success: function(data, textStatus, xhr) {
-                    $('#message').html('');
+                    $('#messageTP').html('');
                     if (xhr.status === 201) {
-                        $('#message').html(
-                            '<div class="alert alert-success" id="message" role="alert">' + data
+                        $('#messageTP').html(
+                            '<div class="alert alert-success" id="messageTP" role="alert">' + data
                             .success + '</div>');
 
                         $("#typesForm")[0].reset();
                         location.reload();
                     } else {
-                        $('#message').html(
-                            '<div class="alert alert-warning" id="message" role="alert">' + data
+                        $('#messageTP').html(
+                            '<div class="alert alert-warning" id="messageTP" role="alert">' + data
                             .error + '</div>');
                     }
                 },
                 error: function(error) {
-
-                    console.log(error);
+                    var errors = Object.keys(response.responseJSON.errors);
+                    $("#typesForm input").each(function(index, item) {
+                        var id = $(item).attr('id');
+                        if (errors.includes(id)) {
+                            $('#' + id).next("span").text("le champ est obligatoire ou invalide.");
+                        }
+                    });
                 },
             });
         });

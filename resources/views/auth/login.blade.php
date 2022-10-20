@@ -10,7 +10,7 @@
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('font/awesome-font/all.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/home.css') }}" rel="stylesheet">
-    <title>Visitor-LOGIN</title>
+    <title>Visitor</title>
 </head>
 
 <body>

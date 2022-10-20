@@ -35,9 +35,7 @@ class Email extends Model
 
 
 
-            $adminEmail = "marhoummohammed3@gmail.com";
-
-            Mail::to($adminEmail)->send(new ContactMail($item));
+           
 
         });
 

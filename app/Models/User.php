@@ -69,7 +69,7 @@ class User extends Authenticatable
 
     public function visite(){
 
-        return  $this->hasMany(App\Models\Visite::class, 'idUSR' );
+        return  $this->belongsTo(App\Models\Visite::class, 'idUSR' );
 
       }
 

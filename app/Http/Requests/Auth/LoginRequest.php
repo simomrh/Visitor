@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-
+use Illuminate\Support\Facades\Session;
 class LoginRequest extends FormRequest
 {
     /**
@@ -56,7 +56,7 @@ class LoginRequest extends FormRequest
                 'email' => trans('auth.failed'),
             ]);
         } else {
-            \Session::put("LoginUSR",$credentials['email']);
+            Session::put("LoginUSR",$credentials['email']);
         }
 
         RateLimiter::clear($this->throttleKey());

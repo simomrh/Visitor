@@ -8,6 +8,7 @@
 
 body {
     position: relative;
+    background-image: url('/img/br.jpg');
 }
 
 .page_header {
@@ -111,13 +112,19 @@ body {
     background-color: var(--side_menu_back);
     color: var(--side_menu_front_color) ;
 }
+
 .side_menu .nav_list  .nav_link:hover {
     color: var(--side_menu_front_hover);
     background-color: rgba(0, 0, 0, 0.2);
     border-left: 3px solid rgba(0, 0, 0, 0.4);
     padding: 0 5px 0 30px;
 }
-
+#dropdownMenuButton:hover{
+    color: var(--side_menu_front_hover);
+    background-color: rgba(0, 0, 0, 0.2);
+    border-left: 3px solid rgba(0, 0, 0, 0.4);
+    padding: 0 5px 0 30px;
+}
 .side_menu .deconnectBtn {
     position: absolute;
     bottom: 10px;
@@ -152,3 +159,68 @@ body {
 .userTr .more-info {
     cursor: pointer;
 }
+.card{
+    width: 1180px;
+}
+.card-body{
+    background-color:#f7f7f7;
+    box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    width: 100%;
+}
+.card-body img{
+    display:flex;
+    width: 500px;
+    float: right;
+}
+
+.card-body .content{
+    margin-top:10%;
+}
+
+.card-body .content span{
+    font-weight: bold;
+    color: #4b0082;
+}
+.list_title{
+/* From https://css.glass */
+background: rgba(53, 3, 87, 0.5);
+
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+
+}
+/*#BlockedTimeDelete{
+    width:300px;
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     margin-top: -100px;
+     margin-left: -100px;
+}
+#RendezVousDelete{
+    width:300px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -100px;
+}
+#DepartementDelete{
+    width:300px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -100px;
+}*/
+
+
+.list_body{
+    background-color: #f8f9fa;
+}
+
+.card-header{
+    font-size:20px;
+    font-weight:bold;
+}
+

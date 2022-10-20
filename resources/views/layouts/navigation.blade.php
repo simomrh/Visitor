@@ -4,10 +4,10 @@
                 class="nav_logo-name">Visitor</span> </a>
 
         <div class="nav_list">
-            <a href="{{ url('dashboard') }}" class="nav_link "> <i class="fa-solid fa-sliders icon"></i> <span
+            <a href="{{ url('dashboard') }}" class="nav_link "> <i class="fa-solid fa-layer-group"></i> <span
                     class="nav_name">Dashboard</span>
             </a>
-            @if (Auth::user()->RoleUSR === 'admin')
+            @if (Illuminate\Support\Facades\Auth::user()->RoleUSR === 'admin')
                 <a href="{{ url('/users') }}" class="nav_link"> <i class="fa-solid fa-user icon"></i> <span
                         class="nav_name">Utilisateurs</span>
 
@@ -18,7 +18,7 @@
             <a href="{{ url('/roundezVous') }}" class="nav_link"> <i class="fa-solid fa-calendar-check icon"></i>
                 <span class="nav_name">Rendez-vous</span>
             </a>
-            @if (Auth::user()->RoleUSR === 'admin')
+            @if (Illuminate\Support\Facades\Auth::user()->RoleUSR === 'admin')
             <a href="{{ url('/departemnt_view') }}" class="nav_link"> <i class="fa-solid fa-building icon"></i> <span
                     class="nav_name">Départements</span>
             </a>
@@ -29,7 +29,7 @@
 
             <div class="dropdown">
                 <a class="btn btn-secondary dropdown-toggle dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                     <i class="fa-solid fa-plus"></i>  Visites Dropdown
+                     <i class="fa-solid fa-plus"></i>  Visites
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a href="{{ url('/visites') }}" class="nav_link"> <i class="fa-solid fa-business-time icon"></i> <span
@@ -41,14 +41,14 @@
                 </div>
               </div>
 
-            @if (Auth::user()->RoleUSR === 'admin')
+            @if (Illuminate\Support\Facades\Auth::user()->RoleUSR === 'admin')
             <a href="{{ url('/journal_email') }}" class="nav_link"> <i class="fa-solid fa-envelope icon"></i> <span
                     class="nav_name">Journal Email</span>
 
             </a>
         @endif
-        @if (Auth::user()->RoleUSR === 'admin')
-        <a href="{{ url('/events') }}" class="nav_link"> <i class="fa-solid fa-ban icon"></i> <span
+        @if (Illuminate\Support\Facades\Auth::user()->RoleUSR === 'admin')
+        <a href="{{ url('/BTview') }}" class="nav_link"> <i class="fa-solid fa-ban icon"></i> <span
                 class="nav_name">temps intervalle</span>
 
         </a>

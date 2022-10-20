@@ -27,5 +27,6 @@ class Visiteur extends Model
         return  $this->hasOne(App\Models\TypeVisite::class );
 
       }
+      
 }
 

@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Visitor') }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/visitor.png') }}">
 
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
@@ -24,7 +25,7 @@
         <div class="master_top_bar">
             <div class="master_logo"></div>
             <div class="master_username">
-                <h5 >{{Auth()->user()->LoginUSR}}</h5>
+                <h5>{{ Illuminate\Support\Facades\Auth::user()->LoginUSR}}</h5>
             </div>
 
         </div>

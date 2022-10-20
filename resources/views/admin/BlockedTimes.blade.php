@@ -2,18 +2,23 @@
 
 @section('content')
 
-    <button class="btn btn-outline-success addBtn" style="margin-top= 10%; float: right;" data-toggle="modal"
-        data-target="#eventsModal">
+
+<br> <br>
+    <div class="card list"  >
+        <div class="card-header list_title">
+            <i class="fa-solid fa-table-list"></i>   Temps Intervalle Liste
+
+        </div>
+
+        <div class="card-body list_body">
+            <button class="btn btn-outline-success addBtn" style="margin-top= 10%; float: right;" data-toggle="modal"
+        data-target="#BlockedTimesModal">
         <i class="fa-solid fa-plus"></i>  Créer Temps Intervalle
     </button>
-<br> <br>
-    <div class="card"  >
-        <div class="card-header">
-            <i class="fa-solid fa-table-list"></i>   Temps Intervalle Liste
-        </div>
-        <div class="card-body">
-
-    <table class="table table-hover " id="eventsTable" style="width:100%">
+            <a class="btn btn-outline-success float-start addBtn" href="{{url('/exportBT')}}">
+                <i class="fa-solid fa-file-export"></i> Export CSV
+            </a>
+    <table class="table table-hover " id="blockedTimesTables" style="width:100%">
         <thead class="bg-light">
             <tr>
                 <th scope="col"></th>
@@ -33,13 +38,13 @@
     </table>
 </div>
 </div>
-    <div class="modal fade" id="eventsModal" tabindex="-1" role="dialog" style="width:100%;">
+    <div class="modal fade" id="BlockedTimesModal" tabindex="-1" role="dialog" style="width:100%;">
         <div class="modal-dialog modal-lg" role="document" style="overflow:auto; max-height:90vh">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><span id="user_modal_title"></span></h5>
+                    <h5 class="modal-title"><span id="BlockedTimeTitle"></span>Ajouter Temp Intervalle</h5>
                     <button type="button" class="btn btn-outline-danger close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">✗</span>
+                        <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -48,10 +53,10 @@
                             {{ session()->get('message') }}
                         </div>
                     @endif
-                    <form id="eventsForm">
+                    <form id="blockedTimesForm">
 
                         <div class="form-group  mb-2">
-                            <label for="IdDEP">IdDEP</label>
+                            <label for="IdDEP">Department</label>
                             <select class="form-control" name="IdDEP" id="IdDEP" required>
                                 @foreach ($departements as $departement)
                                     <option value="{{ $departement->IdDEP }}">{{ $departement->NomDEP }}</option>
@@ -62,18 +67,18 @@
 
 
                         <div class="form-group  mb-2">
-                            <label for="DateDeb">Date Début Evénement</label>
+                            <label for="DateDeb">Date Début </label>
                             <input type="datetime-local" step="1" class="form-control" id="DateDeb" name="DateDeb">
                             <span class="text-danger" id="error_DateDeb"></span>
                         </div>
 
                         <div class="form-group  mb-2">
-                            <label for="DateFin">Date Fin Evénement</label>
+                            <label for="DateFin">Date Fin </label>
                             <input type="datetime-local" step="1" class="form-control" id="DateFin" name="DateFin">
                             <span class="text-danger" id="error_DateFin"></span>
                         </div>
 
-                        <div class="form-group" id="messageEvents">
+                        <div class="form-group" id="messageBlockedTimes">
 
 
                         </div>
@@ -92,40 +97,36 @@
         </div>
     </div>
 
-    <div class="modal fade" id="eventsEditModal" tabindex="-1" role="dialog" style="width:100%;">
+    <div class="modal fade" id="BlockedTimeEdit" tabindex="-1" role="dialog" style="width:100%;">
         <div class="modal-dialog modal-lg" role="document" style="overflow:auto; max-height:90vh">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><span id="user_modal_title">Modification Evénement</span></h5>
+                    <h5 class="modal-title"><span id="titleBT">Modification Temp Intervalle</span></h5>
                     <button type="button" class="btn btn-outline-danger close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">✗</span>
+                        <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    @if (session()->has('message'))
-                        <div class="alert alert-success">
-                            {{ session()->get('message') }}
-                        </div>
-                    @endif
-                    <form id="eventsEditForm">
+
+                    <form id="blockedTimesEditForm">
                         <input type="hidden" class="form-control" id="IdBT" name="IdBT">
 
 
 
 
                         <div class="form-group  mb-2">
-                            <label for="DateDeb">Date Début Rendez-vous</label>
-                            <input type="datetime-local" class="form-control" id="DateDeb" name="DateDeb">
+                            <label for="DateDeb">Date Début </label>
+                            <input type="datetime-local" step="1" class="form-control" id="DateDeb" name="DateDeb">
                             <span class="text-danger" id="error_DateDeb"></span>
                         </div>
                         <div class="form-group  mb-2">
-                            <label for="DateFin">Date Fin Rendez-vous</label>
-                            <input type="datetime-local" class="form-control" id="DateFin" name="DateFin">
+                            <label for="DateFin">Date Fin </label>
+                            <input type="datetime-local" step="1" class="form-control" id="DateFin" name="DateFin">
                             <span class="text-danger" id="error_DateFin"></span>
                         </div>
 
                         <div class="form-group  mb-2">
-                            <label for="IdDEP">IdDEP</label>
+                            <label for="IdDEP"> Department</label>
                             <select class="form-control" name="IdDEP" id="IdDEP" required>
                                 @foreach ($departements as $departement)
                                     <option value="{{ $departement->IdDEP }}">{{ $departement->NomDEP }}</option>
@@ -133,7 +134,7 @@
                             </select>
                             <span class="text-danger" id="error_IdDEP"></span>
                         </div>
-                        <div class="form-group" id="messageEditEvent">
+                        <div class="form-group" id="messageEditBT">
 
                         </div>
                         <!--<button  type="submit" class="btn btn-outline-success nav_name " style="margin-top= 10%">
@@ -144,6 +145,38 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary btnUpdate">Update</button>
+                    <button type="button" class="btn btn-secondary btnAnnul" data-dismiss="modal">Annuler</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="BlockedTimeDelete" tabindex="-1" role="dialog" style=" float:center;">
+        <div class="modal-dialog modal-lg" role="document" style="overflow:auto; max-height:90vh">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><span id="titleBT">Supprimer Temp Intervalle</span></h5>
+                    <button type="button" class="btn btn-outline-danger close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <form id="blockedTimesEditForm">
+                        <input type="hidden" class="form-control" id="IdBT" name="IdBT">
+
+                          <strong>Veuillez confirmer la suppression</strong>
+                        <div class="form-group" id="messageDeleteBT">
+
+                        </div>
+                        <!--<button  type="submit" class="btn btn-outline-success nav_name " style="margin-top= 10%">
+                                                                                                                            <i class='bx bx-user nav_icon'></i> <span class="nav_name"> Submit</span>
+                                                                                                                          </button>-->
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btnDelete">Supprimer</button>
                     <button type="button" class="btn btn-secondary btnAnnul" data-dismiss="modal">Annuler</button>
                 </div>
 
@@ -182,11 +215,11 @@
         }
 
         $(document).ready(function() {
-            var table = $('#eventsTable').DataTable({
+            var table = $('#blockedTimesTables').DataTable({
                 language: {
         url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
     },
-                ajax: "{{ route('api.events') }}",
+                ajax: "{{ route('api.BT') }}",
                 processing: true,
                 columns: [{
                         className: 'dt-control',
@@ -207,12 +240,12 @@
                     },
 
                     {
-                        defaultContent: '<button class="btn btn-outline-primary edit" data-toggle="modal" data-target="#eventsEditModal"><i class="fa-solid fa-pen icon"></i></button>',
+                        defaultContent: '<button class="btn btn-outline-primary edit" data-toggle="modal" data-target="#BlockedTimeEdit"><i class="fa-solid fa-pen icon"></i></button>',
 
                     },
                     {
 
-                        defaultContent: '<button class="btn btn-outline-danger delete" ><i class="fa-solid fa-trash icon"></i></button>',
+                        defaultContent: '<button class="btn btn-outline-danger delete" data-toggle="modal" data-target="#BlockedTimeDelete" ><i class="fa-solid fa-trash icon"></i></button>',
 
                     },
 
@@ -222,7 +255,7 @@
                 ],
             });
 
-            $("#eventsTable").on("click", ".delete", function(e) {
+            $("#blockedTimesTables").on("click", ".delete", function(e) {
                 e.preventDefault();
 
                 $tr = $(this).closest('tr');
@@ -234,46 +267,42 @@
 
                 console.log(data);
                 $('#IdBT ').val(data[1]);
-                swal.fire({
-                    title: "Suppression",
-                    text: "Veuillez confirmer la suppression",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Confirmer",
-                    cancelButtonText: "Annuler",
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajaxSetup({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            }
-                        })
-                        var IdBT = $("input[id=IdBT]").val();
-                        $.ajax({
-                            type: "DELETE",
-                            url: "{{ url('delelte_temp_intervalle') }}/" + IdBT,
-                            dataType: "JSON",
-                            success: function(results) {
-                                if (results.message === true) {
-                                    swal.fire("Done!", results.message, "message");
-                                } else {
-                                    swal.fire("Error!", results.message, "mesaage");
-
-                                }
-                                table.ajax.reload();
-                            } //success
-                        });
-                    } else {
-                        result.dismiss === Swal.DismissReason.cancel
+            });
+                $(document).on("click", ".btnDelete", function(event) {
+                event.preventDefault();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 })
+                var IdBT = $("input[id=IdBT]").val();
+                $.ajax({
+                    type: "DELETE",
+                    url: "{{ url('delelteBT') }}/" + IdBT,
+                     dataType: "JSON",
+                    success: function(data, textStatus, xhr) {
+                        $('#messageDeleteBT').html('');
+                        if (xhr.status === 201) {
+                            $('#messageDeleteBT').html(
+                                '<div class="alert alert-success" id="messageDeleteBT" role="alert">' +
+                                data
+                                .success + '</div>');
+                                location.reload();
+                        } else {
+                            $('#messageDeleteBT').html(
+                                '<div class="alert alert-warning" id="messageDeleteBT" role="alert">' +
+                                data
+                                .error + '</div>');
+                        }
+                    },
 
-
-
+                });
             });
 
-            $("#eventsTable").on("click", ".edit", function(e) {
+
+
+
+            $("#blockedTimesTables").on("click", ".edit", function(e) {
                 e.preventDefault();
 
                 $tr = $(this).closest('tr');
@@ -304,29 +333,29 @@
                 })
                 var IdBT = $("input[id=IdBT]").val();
                 $.ajax({
-                    url: "{{ url('update_events') }}" + '/' + IdBT,
+                    url: "{{ url('updateBT') }}" + '/' + IdBT,
                     type: "PUT",
-                    data: $("#eventsEditForm").serialize(),
+                    data: $("#blockedTimesEditForm").serialize(),
                     success: function(data, textStatus, xhr) {
-                        $('#messageEditEvent').html('');
+                        $('#messageEditBT').html('');
                         if (xhr.status === 201) {
-                            $('#messageEditEvent').html(
-                                '<div class="alert alert-success" id="messageEditEvent" role="alert">' +
+                            $('#messageEditBT').html(
+                                '<div class="alert alert-success" id="messageEditBT" role="alert">' +
                                 data
                                 .message + '</div>');
 
-                            $("#eventsEditForm")[0].reset();
+                            $("#blockedTimesEditForm")[0].reset();
                             table.ajax.reload();
                         } else {
-                            $('#messageEditEvent').html(
-                                '<div class="alert alert-warning" id="messageEditEvent" role="alert">' +
+                            $('#messageEditBT').html(
+                                '<div class="alert alert-warning" id="messageEditBT" role="alert">' +
                                 data
                                 .error + '</div>');
                         }
                     },
                     error: function(response) {
                         var errors = Object.keys(response.responseJSON.errors);
-                        $("#eventsEditForm input, #eventsEditForm select").each(function(index,
+                        $("#blockedTimesEditForm input, #blockedTimesEditForm select").each(function(index,
                             item) {
                             var id = $(item).attr('id');
                             if (errors.includes(id)) {
@@ -339,7 +368,7 @@
                 });
             });
             // Add event listener for opening and closing details
-            $('#eventsTable tbody').on('click', 'td.dt-control', function() {
+            $('#blockedTimesTables tbody').on('click', 'td.dt-control', function() {
                 var tr = $(this).closest('tr');
                 var row = table.row(tr);
 
@@ -362,8 +391,8 @@
             event.preventDefault();
 
 
-            form_data = $("#eventsForm").serialize()
-            $("#eventsForm input").each(function(index, item) {
+            form_data = $("#blockedTimesForm").serialize()
+            $("#blockedTimesForm input").each(function(index, item) {
                 $(item).next("span").text('');
             });
 
@@ -373,29 +402,29 @@
                 }
             });
             $.ajax({
-                url: "/store_events",
+                url: "/storeBT",
                 type: "POST",
                 data: form_data,
                 success: function(data, textStatus, xhr) {
-                    $('#message').html('');
+                    $('#messageBlockedTimes').html('');
                     if (xhr.status === 201) {
-                        $('#messageEvents').html(
-                            '<div class="alert alert-success" id="messageEvents" role="alert">' +
+                        $('#messageBlockedTimes').html(
+                            '<div class="alert alert-success" id="messageBlockedTimes" role="alert">' +
                             data
                             .message + '</div>');
 
-                        $("#eventsForm")[0].reset();
-                        $('#eventsTable').DataTable().ajax.reload();
+                        $("#blockedTimesForm")[0].reset();
+                       location.reload();
                     } else {
-                        $('#messageEvents').html(
-                            '<div class="alert alert-warning" id="messageEvents" role="alert">' +
+                        $('#messageBlockedTimes').html(
+                            '<div class="alert alert-warning" id="messageBlockedTimes" role="alert">' +
                             data
                             .error + '</div>');
                     }
                 },
                 error: function(response) {
                     var errors = Object.keys(response.responseJSON.errors);
-                    $("#eventsForm input").each(function(index, item) {
+                    $("#blockedTimesForm input").each(function(index, item) {
                         var id = $(item).attr('id');
                         if (errors.includes(id)) {
                             $('#' + id).next("span").text("field is required or invalid.");

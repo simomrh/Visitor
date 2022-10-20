@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Departement;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
 
 class DepartementController extends Controller
 {
@@ -59,5 +61,48 @@ class DepartementController extends Controller
         $departement->DateUp  =  date("Y-m-d H:i:s");
         $departement->save();
         return response()->json(['message' => 'Departement est Modifié avec succès   !'], 201);
+    }
+    public function exportDep(Request $request)
+    {
+
+            $departements = Departement::get();
+
+        // these are the headers for the csv file. Not required but good to have one incase of system didn't recongize it properly
+        $headers = array(
+          'Content-Type' => 'text/csv'
+        );
+
+
+        //I am storing the csv file in public >> files folder. So that why I am creating files folder
+        if (!File::exists(public_path()."/files")) {
+            File::makeDirectory(public_path() . "/files");
+        }
+
+        //creating the download file
+        $filename =  public_path("files/departement.csv");
+        $handle = fopen($filename, 'w');
+
+        //adding the first row
+        fputcsv($handle, [ 'Id departement' ,' Nom departement' ],';');
+
+        //adding the data from the array
+        foreach ($departements as $each_departement) {
+            fputcsv($handle, [
+                $each_departement->IdDEP,
+                $each_departement->NomDEP,
+            ],";");
+
+        }
+        fclose($handle);
+
+        //download command
+        return Response::download($filename, "departement.csv", $headers);
+      
+
+    }
+    public function deleteDep($IdDEP){
+        $departement = Departement::find($IdDEP);
+        $departement->delete();
+        return response()->json(['message' => "Temps Intervalle  est Supprimer"], 201);
     }
 }

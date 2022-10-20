@@ -1,24 +1,34 @@
 @extends('layouts.app')
 
 @section('content')
-    <button class="btn btn-outline-success float-end addBtn" style="margin-top= 10%" data-toggle="modal"
-        data-target="#RendezVousModal">
-        <i class="fa-regular fa-calendar-plus"></i> Créer Rendez-vous
-    </button>
-    <br> <br>
-    <div class="card">
-        <div class="card-header">
-            <i class="fa-solid fa-table-list"></i>  Rendez-vous Liste
+    <div class="card list">
+        <div class="card-header list_title">
+            <i class="fa-solid fa-table-list"></i> Rendez-vous Liste
         </div>
-        <div class="card-body">
+        <div class="card-body list_body">
+            <a class="btn btn-outline-success float-start addBtn" href="{{ url('/exportRendezVous') }}">
+                <i class="fa-solid fa-file-export"></i> Export CSV
+            </a>
+            <button class="btn btn-outline-success float-end addBtn" style="margin-top= 10%" data-toggle="modal"
+                data-target="#RendezVousModal">
+                <i class="fa-regular fa-calendar-plus"></i> Créer Rendez-vous
+            </button>
+            <br>
             <table class="table table-hover " id="RendezVousTable" style="width:100%">
 
                 <thead class="bg-light">
                     <tr>
                         <th scope="col"></th>
                         <th scope="col"> IdRD </th>
-                        <th scope="col">DateRDV</th>
+                        <th scope="col">Date RD</th>
+                        <th scope="col">Confirmer RD</th>
+                        <th scope="col">Refuser RD</th>
+                        <th scope="col">Valider</th>
+                        <th scope="col">Annuler</th>
                         <th scope="col">Action</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <!-- <th scope="col"></th>!-->
                     </tr>
                 </thead>
                 <tbody>
@@ -32,17 +42,13 @@
         <div class="modal-dialog modal-lg" role="document" style="overflow:auto; max-height:90vh">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><span id="user_modal_title">Nouveau Rendez-vous</span></h5>
+                    <h5 class="modal-title"><span id="titleRD">Ajouter Rendez-vous</span></h5>
                     <button type="button" class="btn btn-outline-danger close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">✗</span>
+                        <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    @if (session()->has('message'))
-                        <div class="alert alert-success">
-                            {{ session()->get('message') }}
-                        </div>
-                    @endif
+
                     <form id="RendezVousForm">
                         <div class="form_col">
                             <div class="form-group mb-2">
@@ -56,10 +62,10 @@
                             </div>
 
                             <!--<div class="form-group mb-2">
-                                                                <label for="IdVS">ID</label>
-                                                                <input type="text" class="form-control" id="IdVS" name="IdVS" readonly
-                                                                    placeholder="Nouveau visiteur" />
-                                                            </div>!-->
+                                                                                <label for="IdVS">ID</label>
+                                                                                <input type="text" class="form-control" id="IdVS" name="IdVS" readonly
+                                                                                    placeholder="Nouveau visiteur" />
+                                                                            </div>!-->
                             <div class="form-group mb-2">
                                 <label for="NomVS">Nom Complet Visiteur</label>
                                 <input type="text" class="form-control" id="NomVS" name="NomVS">
@@ -80,33 +86,31 @@
                                 <input type="email" class="form-control" id="EmailVS" name="EmailVS">
                                 <span class="text-danger" id="error_EmailVS"></span>
                             </div>
+
+                        </div>
+                        <div class="form_col">
                             <div class="form-group  mb-2">
                                 <label for="IdDEP">Departement</label>
                                 <select class="form-control" name="IdDEP" id="IdDEP" required>
+                                    <option value="">choisir Departement</option>
                                     @foreach ($departements as $departement)
                                         <option value="{{ $departement->IdDEP }}">{{ $departement->NomDEP }}</option>
                                     @endforeach
                                 </select>
                                 <span class="text-danger" id="error_IdDEP"></span>
                             </div>
-                        </div>
-                        <div class="form_col">
-
                             <div class="form-group  mb-2">
                                 <label for="IdDEP">Hébergeur</label>
                                 <select class="form-control" name="idUSR" id="idUSR" required>
-                                   <option value="">choisir</option>
-                                   @foreach ($users as $user)
-                                        <option value="{{ $user->idUSR }}">{{ $user->NomUSR }} {{ $user->PrenomUSR }} </option>
+                                    <option value="">choisir Hébergeur</option>
+                                    @foreach ($users as $user)
+                                        <option value="{{ $user->idUSR }}">{{ $user->NomUSR }} {{ $user->PrenomUSR }}
+                                        </option>
                                     @endforeach
                                 </select>
-                                <span class="text-danger" id="error_IdDEP"></span>
+                                <span class="text-danger" id="error_idUSR"></span>
                             </div>
-                            <div class="form-group  mb-2">
-                                <label for="NomRS">Raison Visite</label>
-                                <input type="text" class="form-control" id="RaisonVis" name="RaisonVis">
-                                <span class="text-danger" id="error_RaisonVis"></span>
-                            </div>
+
 
                             <div class="form-group  mb-2">
                                 <label for="SocieteVS">Societe Visiteur</label>
@@ -117,20 +121,21 @@
                             <div class="form-group  mb-2">
                                 <label for="NomTP">Type Visite</label>
                                 <select class="form-control" name="IdTP" id="IdTP" required>
+                                    <option value="">choisir Type Visite</option>
                                     @foreach ($typesVisite as $item)
                                         <option value="{{ $item->IdTP }}">{{ $item->NomTP }}</option>
                                     @endforeach
                                 </select>
-                                <span class="text-danger" id="error_NomTP"></span>
+                                <span class="text-danger" id="error_IdTP"></span>
                             </div>
 
 
 
                             <div class="form-group  mb-2">
-                                <label for="DateRDV">Date Rendez-vous</label>
-                                <input type="datetime-local" step="1" class="form-control"  id="DateRDV"
-                                    name="DateRDV">
-                                <span class="text-danger" id="error_DateRDV"></span>
+                                <label for="DateRD">Date Rendez-vous</label>
+                                <input type="datetime-local" step="1" class="form-control" id="DateRD"
+                                    name="DateRD">
+                                <span class="text-danger" id="error_DateRD"></span>
                             </div>
                             {{-- <div class="form-group  mb-2">
                                 <label for="DateFin">Date Fin Rendez-vous</label>
@@ -143,8 +148,8 @@
                         </div>
 
                         <!--<button  type="submit" class="btn btn-outline-success nav_name " style="margin-top= 10%">
-                                                                                                                                    <i class='bx bx-user nav_icon'></i> <span class="nav_name"> Submit</span>
-                                                                                                                                  </button>-->
+                                                                                                                                                    <i class='bx bx-user nav_icon'></i> <span class="nav_name"> Submit</span>
+                                                                                                                                                  </button>-->
                     </form>
 
                 </div>
@@ -161,9 +166,9 @@
         <div class="modal-dialog modal-lg" role="document" style="overflow:auto; max-height:90vh">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><span id="user_modal_title"></span>Modification Rendez-vous</h5>
+                    <h5 class="modal-title"><span id="titleRD"></span>Modification Rendez-vous</h5>
                     <button type="button" class="btn btn-outline-danger close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">✗</span>
+                        <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -175,11 +180,11 @@
                     <form id="RendezVousFormEdit">
                         <input type="hidden" class="form-control" id="IdRD" name="IdRD">
 
-                        <div class="form-group  mb-2">
-                            <label for="DateRDV">Date Rendez-vous</label>
-                            <input type="datetime-local" step="1" class="form-control"  id="DateRDV"
-                                name="DateRDV">
-                            <span class="text-danger" id="error_DateRDV"></span>
+                        <div class="form-group">
+                            <label for="DateRD">Date Rendez-vous </label>
+                            <input type="datetime-local" step="1" class="form-control" id="DateRD"
+                                name="DateRD">
+                            <span class="text-danger" id="error_DateRD "></span>
                         </div>
 
 
@@ -189,13 +194,99 @@
                         </div>
 
                         <!--<button  type="submit" class="btn btn-outline-success nav_name " style="margin-top= 10%">
-                                                                                                                                    <i class='bx bx-user nav_icon'></i> <span class="nav_name"> Submit</span>
-                                                                                                                                  </button>-->
+                                                                                                                                                    <i class='bx bx-user nav_icon'></i> <span class="nav_name"> Submit</span>
+                                                                                                                                                  </button>-->
                     </form>
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary btnUpdate">Update</button>
+                    <button type="button" class="btn btn-secondary btnAnnul" data-dismiss="modal">Annuler</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ValiderModal" tabindex="-1" role="dialog" style="width:100%;">
+        <div class="modal-dialog modal-lg" role="document" style="overflow:auto; max-height:90vh">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><span id="user_modal_title"></span>Modification Visite</h5>
+                    <button type="button" class="btn btn-outline-danger close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">✗</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @if (session()->has('message'))
+                        <div class="alert alert-success">
+                            {{ session()->get('message') }}
+                        </div>
+                    @endif
+                    <form id="validerForm">
+
+                        <input type="hidden" class="form-control" id="IdRD" name="IdRD">
+
+                        <div class="form_col">
+                            <label for="Valide"><input type="checkbox" id="Valide" name="Valide[]" value="1">
+                                Valider
+                                Rendez-vous</label>
+                        </div>
+
+                        <div class="form-group" id="Valider">
+
+                        </div>
+
+                        <!--<button  type="submit" class="btn btn-outline-success nav_name " style="margin-top= 10%">
+                                                                                                    <i class='bx bx-user nav_icon'></i> <span class="nav_name"> Submit</span>
+                                                                                                  </button>-->
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btnValider">Valider</button>
+                    <button type="button" class="btn btn-secondary btnAnnul" data-dismiss="modal">Annuler</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="BlockModal" tabindex="-1" role="dialog" style="width:100%;">
+        <div class="modal-dialog modal-lg" role="document" style="overflow:auto; max-height:90vh">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><span id="user_modal_title"></span>Modification Visite</h5>
+                    <button type="button" class="btn btn-outline-danger close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">✗</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @if (session()->has('message'))
+                        <div class="alert alert-success">
+                            {{ session()->get('message') }}
+                        </div>
+                    @endif
+                    <form id="AnnulerForm">
+
+                        <input type="hidden" class="form-control" id="IdRD" name="IdRD">
+
+                        <div class="form_col">
+                            <label for="Annule"><input type="checkbox" id="Annule" name="Annule[]" value="1">
+                                Annuler
+                                Rendez-vous</label>
+                        </div>
+
+                        <div class="form-group" id="Annuler">
+
+                        </div>
+
+                        <!--<button  type="submit" class="btn btn-outline-success nav_name " style="margin-top= 10%">
+                                                                                                    <i class='bx bx-user nav_icon'></i> <span class="nav_name"> Submit</span>
+                                                                                                  </button>-->
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btnBlock">Enregistrer</button>
                     <button type="button" class="btn btn-secondary btnAnnul" data-dismiss="modal">Annuler</button>
                 </div>
 
@@ -295,13 +386,14 @@
         $(document).ready(function() {
             var table = $('#RendezVousTable').DataTable({
                 language: {
-        url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
-    },
+                    url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+                },
                 ajax: "{{ route('api.roundez') }}",
                 processing: true,
                 columns: [{
                         className: 'dt-control',
                         data: null,
+
                         defaultContent: '',
                     },
                     {
@@ -309,10 +401,83 @@
                     },
 
                     {
-                        data: 'DateRDV'
+                        data: 'DateRD'
+                    },
+                    {
+                        data: 'ConfirmerRD',
+                        render: function(data, type, row) {
+
+                            if (row.ConfirmerRD === 1) {
+
+                                return '<span class="btn btn-success">Oui</span>';
+
+                            } else {
+
+                                return '<span class="btn btn-danger">Non</span >';
+
+                            }
+                        }
+                    },
+                    {
+                        data: 'RefuserRD',
+                        render: function(data, type, row) {
+
+                            if (row.AnnulerRD === 1) {
+
+                                return '<span class="btn btn-success">Oui</span>';
+
+                            } else {
+
+                                return '<span class="btn btn-danger">Non</span >';
+
+                            }
+                        }
+
+                    },
+                    {
+                        data: 'Valide',
+                        render: function(data, type, row) {
+
+                            if (row.Valide === 1) {
+
+                                return '<span class="btn btn-success">Oui</span>';
+
+                            } else {
+
+                                return '<span class="btn btn-danger">Non</span >';
+
+                            }
+                        }
+
+                    },
+                    {
+                        data: 'Annule',
+                        render: function(data, type, row) {
+
+                            if (row.Annule === 1) {
+
+                                return '<span class="btn btn-success">Oui</span>';
+
+                            } else {
+
+                                return '<span class="btn btn-danger">Non</span >';
+
+                            }
+                        }
+
                     },
                     {
                         defaultContent: '<button class="btn btn-outline-primary edit" data-toggle="modal" data-target="#RendezVousEditModal"><i class="fa-solid fa-pen icon"></i></button>',
+
+                    },
+                    {
+
+                        defaultContent: '<button class="btn btn-outline-success valide" data-toggle="modal" data-target="#ValiderModal" ><i class="fa-solid fa-check icon"></i></button>',
+
+                    },
+                    {
+
+                        defaultContent: '<button class="btn btn-outline-danger block" data-toggle="modal" data-target="#BlockModal" ><i class="fa-solid fa-ban icon"></i></button>',
 
                     },
                 ],
@@ -320,18 +485,21 @@
                     [1, 'asc']
                 ],
             });
-            $('#RendezVousTable').on('click', '.edit', function(e) {
+            $('#RendezVousTable').on("click", ".edit", function(e) {
 
                 e.preventDefault();
+
                 $tr = $(this).closest('tr');
 
                 var data = $tr.children("td").map(function() {
                     return $(this).text();
                 }).get();
 
+
                 console.log(data);
                 $('#IdRD ').val(data[1]);
-                $('#DateRDV ').val(data[2]);
+                $('#DateRD  ').val(data[2]);
+
 
 
             });
@@ -380,12 +548,175 @@
                     },
                 });
             });
-            $(".reloadBtn").on('click', function() {
-                setInterval(function() {
-                    table.ajax.reload();
-                }, 3000);
+            /* $("#RendezVousTable").on("click", ".delete", function(e) {
+
+                 e.preventDefault();
+
+                 $tr = $(this).closest('tr');
+
+                 var data = $tr.children("td").map(function() {
+                     return $(this).text();
+                 }).get();
+
+
+                 console.log(data);
+                 $('#IdRD ').val(data[1]);
+             });
+                 $(document).on("click", ".btnDelete", function(event) {
+                 event.preventDefault();
+                 $.ajaxSetup({
+                     headers: {
+                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                     }
+                 })
+                 var IdRD = $("input[id=IdRD]").val();
+                 $.ajax({
+                     type: "DELETE",
+                     url: "{{ url('delete_rendez_vous') }}/" + IdRD,
+                      dataType: "JSON",
+                     success: function(data, textStatus, xhr) {
+                         $('#messageDeleteRD').html('');
+                         if (xhr.status === 201) {
+                             $('#messageDeleteRD').html(
+                                 '<div class="alert alert-success" id="messageDeleteRD" role="alert">' +
+                                 data
+                                 .success + '</div>');
+                             table.ajax.reload();
+                         } else {
+                             $('#messageDeleteRD').html(
+                                 '<div class="alert alert-warning" id="messageDeleteRD" role="alert">' +
+                                 data
+                                 .error + '</div>');
+                         }
+                     },
+
+                 });
+             });*/
+
+             $('#RendezVousTable').on("click", ".valide", function(e) {
+                e.preventDefault();
+
+                $tr = $(this).closest('tr');
+
+                var data = $tr.children("td").map(function() {
+                    return $(this).text();
+                }).get();
+
+
+                console.log(data);
+                $('#IdRD').val(data[1]);
+                $('#Valide ').val(data[5]);
+
+
+
             });
-            // Add event listener for opening and closing details
+            $(document).on("click", ".btnValider", function(event) {
+                event.preventDefault();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                })
+
+                var IdRD = $("input[id=IdRD]").val();
+                $.ajax({
+                    url: "{{ url('valider_rdv') }}"  + '/' + IdRD ,
+                    type: "PUT",
+                    data: $("#validerForm").serialize(),
+                    success: function(data, textStatus, xhr) {
+                        $('#Valider').html('');
+                        if (xhr.status === 201) {
+                            $('#Valider').html(
+                                '<div class="alert alert-success" id="Valider" role="alert">' +
+                                data
+                                .success + '</div>');
+
+                            $("#validerForm")[0].reset();
+                            table.ajax.reload();
+                        } else {
+                            $('#Valider').html(
+                                '<div class="alert alert-warning" id="Valider" role="alert">' +
+                                data
+                                .error + '</div>');
+                        }
+                    },
+                    error: function(response) {
+                        var errors = Object.keys(response.responseJSON.errors);
+                        $("#validerFrom input").each(function(index, item) {
+                            var id = $(item).attr('id');
+                            if (errors.includes(id)) {
+                                $('#' + id).next("span").text(
+                                    "field is required or invalid.");
+                            }
+                        });
+
+                    },
+                });
+            });
+            $('#RendezVousTable').on("click", ".block", function(e) {
+                e.preventDefault();
+
+                $tr = $(this).closest('tr');
+
+                var data = $tr.children("td").map(function() {
+                    return $(this).text();
+                }).get();
+
+
+                console.log(data);
+                $('#IdRD').val(data[1]);
+                $('#Annule ').val(data[6]);
+
+
+
+            });
+            $(document).on("click", ".btnBlock", function(event) {
+                event.preventDefault();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                })
+
+                var IdRD = $("input[id=IdRD]").val();
+                $.ajax({
+                    url: "{{ url('block_rdv') }}"  + '/' + IdRD ,
+                    type: "PUT",
+                    data: $("#AnnulerForm").serialize(),
+                    success: function(data, textStatus, xhr) {
+                        $('#Annuler').html('');
+                        if (xhr.status === 201) {
+                            $('#Annuler').html(
+                                '<div class="alert alert-success" id="Annuler" role="alert">' +
+                                data
+                                .success + '</div>');
+
+                            $("#AnnulerForm")[0].reset();
+                            table.ajax.reload();
+                        } else {
+                            $('#Annuler').html(
+                                '<div class="alert alert-warning" id="Annuler" role="alert">' +
+                                data
+                                .error + '</div>');
+                        }
+                    },
+                    error: function(response) {
+                        var errors = Object.keys(response.responseJSON.errors);
+                        $("#validerFrom input").each(function(index, item) {
+                            var id = $(item).attr('id');
+                            if (errors.includes(id)) {
+                                $('#' + id).next("span").text(
+                                    "field is required or invalid.");
+                            }
+                        });
+
+                    },
+                });
+            });
+
+
+
+             // Add event listener for opening and closing details
             $('#RendezVousTable tbody').on('click', 'td.dt-control', function() {
                 var tr = $(this).closest('tr');
                 var row = table.row(tr);

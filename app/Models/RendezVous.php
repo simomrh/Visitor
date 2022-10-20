@@ -11,25 +11,31 @@ class RendezVous extends Model
 
     protected $table = 'wb_rendezvous';
 
-    protected $fillable = ['DateRDV',  'UserCr', 'DateCr'];
+    protected $fillable = ['DateRD', 'ConfirmerRD' ,'AnnulerRD' , 'UserCr', 'DateCr'];
 
 
-    protected $dateFormat = 'datetime:d-m-Y H:i:s';
+    protected $dateFormat = 'datetime:Y-m-d H:i:s';
 
 
     protected $dates = [
-        'DateRDV'  => 'datetime:d-m-Y H:i:s' ,
+        'DateRDV'  => 'datetime:Y-m-d H:i:s' ,
     ];
     protected $casts = [
 
-        'DateRDV' => 'datetime:d-m-Y H:i:s',
-        'DateCr' => 'datetime:d-m-Y H:i:s',
-        'DateUp' => 'datetime:d-m-Y H:i:s',
+        'DateRDV' => 'datetime:Y-m-d H:i:s',
+        'DateCr' => 'datetime:Y-m-d H:i:s',
+        'DateUp' => 'datetime:Y-m-d H:i:s',
 
     ];
 
     public $timestamps = false;
     protected $primaryKey = 'IdRD';
 
+
+    public function visite(){
+
+        return  $this->belongsTo(App\Models\Visite::class, 'IdRD' );
+
+      }
 
 }

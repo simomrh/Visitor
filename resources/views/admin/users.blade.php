@@ -1,18 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
-    <button class="btn btn-outline-success float-end addBtn" style="margin-top= 10%" data-toggle="modal"
-        data-target="#userInfoModal">
-        <i class="fa-solid fa-user-plus"></i> Créer Utilisateur
-    </button>
-    <br> <br>
-    <div class="card">
-        <div class="card-header">
-            <i class="fa-solid fa-table-list"></i> Utilisateurs Liste
-        </div>
-        <div class="card-body">
 
-            <table id="UserTable" class="display table table-hover" style="width:100%">
+    <br> <br>
+    <div class="card list">
+        <div class="card-header list_title">
+            <i class="fa-solid fa-table-list "></i> Utilisateurs Liste
+        </div>
+        <div class="card-body list_body">
+            <a class="btn btn-outline-success float-start addBtn" href="{{url('/exportusers')}}">
+                <i class="fa-solid fa-file-export"></i> Export CSV
+            </a>
+                <button class="btn btn-outline-success float-end addBtn" style="margin-top= 10%" data-toggle="modal"
+                    data-target="#userInfoModal">
+                    <i class="fa-solid fa-user-plus"></i> Créer Utilisateur
+                </button>
+                <br>
+            <table id="UserTable" class=" table table-hover" style="width:60%">
                 <thead class="bg-light ">
                     <tr>
                         <th></th>
@@ -24,8 +28,8 @@
                         <th>Tél</th>
                         <th>Email</th>
                         <th>Département</th>
-                        <th>RDV valid</th>
-                        <th>Bloque Visiteur</th>
+                        <th>valide</th>
+                        <th>Bloque</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -56,9 +60,9 @@
         <div class="modal-dialog modal-lg" role="document" style="overflow:auto; max-height:90vh">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><span id="user_modal_title">Nouveau Utilisateur</span></h5>
+                    <h5 class="modal-title"><span id="user_modal_title">Ajouter Utilisateur</span></h5>
                     <button type="button" class="btn btn-outline-danger close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">✗</span>
+                        <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -70,49 +74,51 @@
                     <form id="userForm">
                         <div class="form_col">
                             <div class="form-group mb-2">
-                                <label for="LoginUSR">LoginUSR</label>
+                                <label for="LoginUSR">Username</label>
                                 <input type="text" class="form-control" id="LoginUSR" name="LoginUSR">
                                 <span class="text-danger" id="error_LoginUSR"></span>
                             </div>
                             <div class="form-group  mb-2">
-                                <label for="PassUSR">PassUSR</label>
+                                <label for="PassUSR">Mot de Pass</label>
                                 <input type="password" class="form-control" id="PassUSR" name="PassUSR">
                                 <span class="text-danger" id="error_PassUSR"></span>
                             </div>
                             <div class="form-group  mb-2">
-                                <label for="RoleUSR">RoleUSR</label>
+                                <label for="RoleUSR">Role Utilisateur</label>
                                 <select class="form-control" name="RoleUSR" id="RoleUSR" required>
+                                    <option value="">choisissez Role</option>
                                     <option value="admin">Admin</option>
                                     <option value="user">User</option>
                                 </select>
                                 <span class="text-danger" id="error_RoleUSR"></span>
                             </div>
                             <div class="form-group mb-2">
-                                <label for="NomUSR">NomUSR</label>
+                                <label for="NomUSR">Nom Utilisateur</label>
                                 <input type="text" class="form-control" id="NomUSR" name="NomUSR">
                                 <span class="text-danger" id="error_NomUSR"></span>
                             </div>
                             <div class="form-group  mb-2">
-                                <label for="PrenomUSR">PrenomUSR</label>
+                                <label for="PrenomUSR">Prenom Utilisateur</label>
                                 <input type="text" class="form-control" id="PrenomUSR" name="PrenomUSR">
                                 <span class="text-danger" id="error_PrenomUSR"></span>
                             </div>
                         </div>
                         <div class="form_col">
                             <div class="form-group  mb-2">
-                                <label for="GSMUSR">GSMUSR</label>
+                                <label for="GSMUSR">Telphone Utilisateur</label>
                                 <input type="telephone" class="form-control" id="GSMUSR" name="GSMUSR">
                                 <span class="text-danger" id="error_GSMUSR"></span>
                             </div>
                             <div class="form-group  mb-2">
-                                <label for="EmailUSR">EmailUSR</label>
+                                <label for="EmailUSR">Email Utilisateur</label>
                                 <input type="email" class="form-control" id="EmailUSR" name="EmailUSR">
                                 <span class="text-danger" id="error_EmailUSR"></span>
                             </div>
 
                             <div class="form-group  mb-2">
-                                <label for="IdDEP">IdDEP</label>
+                                <label for="IdDEP">Département</label>
                                 <select class="form-control" name="IdDEP" id="IdDEP" required>
+                                    <option value="">choisissez Département</option>
                                     @foreach ($departements as $departement)
                                         <option value="{{ $departement->IdDEP }}">{{ $departement->NomDEP }}</option>
                                     @endforeach
@@ -123,11 +129,11 @@
                             <div class="form-group  mb-2">
                                 <label> Actions : </label><br>
                                 <label><input type="checkbox" name="ValideRD[]" value="1"> Valider
-                                    Rendez-vous</label> <span>/</span>
-                                <label><input type="checkbox" name="ValideRD[]" value="1"> Annuler</label>
+                                    Visite</label> 
+
                             </div>
                             <div class="form-group  mb-2">
-                                <label> <input type="checkbox" name="BloqueVS[]" value="1"> Bloque Visiteur</label>
+                                <label> <input type="checkbox" name="BloqueVS[]" value="1"> Bloque Visite</label>
                             </div>
                         </div>
                         <div class="form-group" id="message">
@@ -154,7 +160,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title"><span id="user_modal_title"></span>Modification Utilisateur</h5>
                     <button type="button" class="btn btn-outline-danger close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">✗</span>
+                        <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -167,7 +173,7 @@
                         <input type="hidden" class="form-control" id="idUSR" name="idUSR">
                         <div class="form_col">
                             <div class="form-group mb-2">
-                                <label for="LoginUSR">LoginUSR</label>
+                                <label for="LoginUSR">Username</label>
                                 <input type="text" class="form-control" id="LoginUSR" name="LoginUSR">
                                 <span class="text-danger" id="error_LoginUSR"></span>
                             </div>
@@ -177,41 +183,43 @@
                                         <span class="text-danger" id="error_PassUSR"></span>
                                     </div>!-->
                             <div class="form-group  mb-2">
-                                <label for="RoleUSR">RoleUSR</label>
+                                <label for="RoleUSR">Role Utilisateur</label>
                                 <select class="form-control" name="RoleUSR" id="RoleUSR" required>
+                                    <option value="">choisissez Role</option>
                                     <option value="admin">Admin</option>
                                     <option value="user">User</option>
                                 </select>
                                 <span class="text-danger" id="error_RoleUSR"></span>
                             </div>
                             <div class="form-group mb-2">
-                                <label for="NomUSR">NomUSR</label>
+                                <label for="NomUSR">Nom Utilisateur</label>
                                 <input type="text" class="form-control" id="NomUSR" name="NomUSR">
                                 <span class="text-danger" id="error_NomUSR"></span>
                             </div>
                             <div class="form-group  mb-2">
-                                <label for="PrenomUSR">PrenomUSR</label>
+                                <label for="PrenomUSR">Prenom Utilisateur</label>
                                 <input type="text" class="form-control" id="PrenomUSR" name="PrenomUSR">
                                 <span class="text-danger" id="error_PrenomUSR"></span>
                             </div>
 
 
                             <div class="form-group  mb-2">
-                                <label for="GSMUSR">GSMUSR</label>
+                                <label for="GSMUSR">GSM Utilisateur</label>
                                 <input type="telephone" class="form-control" id="GSMUSR" name="GSMUSR">
                                 <span class="text-danger" id="error_GSMUSR"></span>
                             </div>
                         </div>
                         <div class="form_col">
                             <div class="form-group  mb-2">
-                                <label for="EmailUSR">EmailUSR</label>
+                                <label for="EmailUSR">Email Utilisateur</label>
                                 <input type="email" class="form-control" id="EmailUSR" name="EmailUSR">
                                 <span class="text-danger" id="error_EmailUSR"></span>
                             </div>
 
                             <div class="form-group  mb-2">
-                                <label for="IdDEP">IdDEP</label>
+                                <label for="IdDEP">Departement</label>
                                 <select class="form-control" name="IdDEP" id="IdDEP" required>
+                                    <option value="">choisissez Departement</option>
                                     @foreach ($departements as $departement)
                                         <option value="{{ $departement->IdDEP }}">{{ $departement->NomDEP }}</option>
                                     @endforeach
@@ -221,11 +229,11 @@
                             <div class="form-group  mb-2">
                                 <label> Actions : </label><br>
                                 <label><input type="checkbox" id="ValideRD" name="ValideRD[]" value="1"> Valider
-                                    Rendez-vous</label>
+                                    Visite</label>
                             </div>
                             <div class="form-group  mb-2">
                                 <label> <input type="checkbox" id="BloqueVS" name="BloqueVS[]" value="1"> Bloque
-                                    Visiteur</label>
+                                    Visite</label>
                             </div>
                         </div>
                         <div class="form-group" id="messageEdit">
@@ -489,4 +497,10 @@
             });
         });
     </script>
+    <script>
+        function exportTasks(_this) {
+           let _url = $(_this).data('href');
+           window.location.href = _url;
+        }
+     </script>
 @endpush
